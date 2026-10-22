@@ -1,0 +1,839 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeMaster - Typing Speed Test</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --bg: #0b1120;
+            --card: #151e30;
+            --border: #28354b;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --primary: #818cf8;
+            --green: #4ade80;
+            --red: #fb7185;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            padding: 30px 16px;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .tagline {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .best-score {
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--card);
+            font-size: 13px;
+        }
+
+        .best-score strong {
+            color: #fbbf24;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .intro h1 {
+            font-size: clamp(28px, 5vw, 42px);
+            margin-bottom: 12px;
+            letter-spacing: -1.5px;
+        }
+
+        .intro h1 span {
+            color: var(--primary);
+        }
+
+        .intro p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .game-card {
+            padding: 26px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: var(--card);
+            box-shadow: 0 20px 50px #00000025;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            padding-bottom: 22px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .modes {
+            display: flex;
+            gap: 6px;
+        }
+
+        button {
+            cursor: pointer;
+            font-family: inherit;
+            transition: 0.2s;
+        }
+
+        .mode-btn {
+            padding: 9px 15px;
+            color: var(--muted);
+            background: #0b1120;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+        }
+
+        .mode-btn.active {
+            color: white;
+            background: #6366f1;
+            border-color: #818cf8;
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.45;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .stat {
+            padding: 17px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #0b1120;
+        }
+
+        .stat-label {
+            margin-bottom: 9px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .stat-value {
+            font-size: 27px;
+            font-weight: 800;
+        }
+
+        .stat-value small {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .timer-value {
+            color: #fbbf24;
+        }
+
+        .progress-track {
+            height: 5px;
+            overflow: hidden;
+            background: #28354b;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 100%;
+            background: var(--primary);
+            transition: width 0.2s linear;
+        }
+
+        .text-box {
+            position: relative;
+            min-height: 180px;
+            padding: 22px;
+            background: #0b1120;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            line-height: 2;
+            font-size: 18px;
+            letter-spacing: 0.3px;
+        }
+
+        .text-box span.correct {
+            color: var(--green);
+        }
+
+        .text-box span.incorrect {
+            color: var(--red);
+            background: #fb71851c;
+            border-radius: 3px;
+            text-decoration: underline;
+        }
+
+        .text-box span.current {
+            border-left: 2px solid var(--primary);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        .input-area {
+            margin-top: 18px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 16px;
+            color: var(--text);
+            background: #0b1120;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            outline: none;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        textarea:focus {
+            border-color: var(--primary);
+        }
+
+        textarea:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .hint {
+            margin-top: 9px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .status {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            color: var(--text);
+            background: #202b40;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            color: white;
+            background: #6366f1;
+            border-color: #6366f1;
+        }
+
+        .btn:hover:not(:disabled) {
+            filter: brightness(1.12);
+            transform: translateY(-1px);
+        }
+
+        .result {
+            display: none;
+            margin-top: 25px;
+            padding: 24px;
+            border: 1px solid #4ade8040;
+            border-radius: 14px;
+            background: #4ade800a;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result h2 {
+            margin-bottom: 8px;
+            font-size: 23px;
+        }
+
+        .result > p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .result-stat {
+            padding: 15px;
+            border-radius: 10px;
+            background: #151e30;
+        }
+
+        .result-stat strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 25px;
+        }
+
+        .result-stat span {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .new-record {
+            color: #fbbf24 !important;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        footer {
+            margin-top: 28px;
+            text-align: center;
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 22px 12px; }
+
+            header {
+                align-items: flex-start;
+                margin-bottom: 30px;
+            }
+
+            .logo { font-size: 21px; }
+
+            .best-score {
+                padding: 10px;
+                font-size: 11px;
+            }
+
+            .game-card { padding: 17px; }
+
+            .toolbar { align-items: flex-start; }
+
+            .stat { padding: 12px; }
+
+            .stat-value { font-size: 23px; }
+
+            .text-box {
+                padding: 15px;
+                font-size: 16px;
+            }
+
+            .result-stats { gap: 7px; }
+
+            .result-stat { padding: 10px; }
+
+            .result-stat strong { font-size: 20px; }
+
+            .actions { align-items: flex-start; }
+
+            .buttons { width: 100%; }
+
+            .buttons .btn { flex: 1; }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+
+        <header>
+            <div>
+                <div class="logo">Type<span>Master.</span></div>
+                <p class="tagline">Practice makes progress.</p>
+            </div>
+
+            <div class="best-score">
+                🏆 Best: <strong id="bestScore">0 WPM</strong>
+            </div>
+        </header>
+
+        <section class="intro">
+            <h1>Test your <span>typing speed.</span></h1>
+            <p>
+                Latih kecepatan mengetikmu, tingkatkan akurasi,<br>
+                dan kalahkan rekor terbaikmu!
+            </p>
+        </section>
+
+        <section class="game-card">
+
+            <div class="toolbar">
+                <div>
+                    <span class="section-label">Pilih durasi</span>
+                    <div class="modes">
+                        <button class="mode-btn" data-time="15">15 detik</button>
+                        <button class="mode-btn active" data-time="30">30 detik</button>
+                        <button class="mode-btn" data-time="60">60 detik</button>
+                    </div>
+                </div>
+
+                <button class="btn" id="newTextBtn">↻ Teks baru</button>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-label">Kecepatan</div>
+                    <div class="stat-value">
+                        <span id="wpm">0</span>
+                        <small>WPM</small>
+                    </div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-label">Akurasi</div>
+                    <div class="stat-value">
+                        <span id="accuracy">100</span>
+                        <small>%</small>
+                    </div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-label">Waktu tersisa</div>
+                    <div class="stat-value timer-value">
+                        <span id="timer">30</span>
+                        <small>detik</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-track">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <div class="text-box" id="textDisplay"></div>
+
+            <div class="input-area">
+                <textarea
+                    id="typingInput"
+                    placeholder="Tekan Mulai, lalu ketik teks di atas..."
+                    disabled
+                    spellcheck="false"
+                    autocomplete="off"
+                    autocapitalize="off"
+                ></textarea>
+
+                <p class="hint">
+                    💡 Tips: Ketik sesuai teks yang ditampilkan.
+                    Hijau berarti benar, merah berarti salah.
+                </p>
+            </div>
+
+            <div class="actions">
+                <p class="status" id="status">Siap untuk menguji kemampuanmu?</p>
+
+                <div class="buttons">
+                    <button class="btn btn-primary" id="startBtn">
+                        ▶ Mulai
+                    </button>
+
+                    <button class="btn" id="resetBtn">
+                        ↻ Ulangi
+                    </button>
+                </div>
+            </div>
+
+            <div class="result" id="result">
+                <h2 id="resultTitle">Hasil latihan 🎉</h2>
+                <p id="resultMessage"></p>
+
+                <div class="result-stats">
+                    <div class="result-stat">
+                        <strong id="finalWpm">0</strong>
+                        <span>WPM</span>
+                    </div>
+
+                    <div class="result-stat">
+                        <strong id="finalAccuracy">0%</strong>
+                        <span>Akurasi</span>
+                    </div>
+
+                    <div class="result-stat">
+                        <strong id="finalChars">0</strong>
+                        <span>Karakter benar</span>
+                    </div>
+                </div>
+
+                <p class="new-record" id="recordMessage"></p>
+
+                <button class="btn btn-primary" id="playAgainBtn">
+                    Main lagi →
+                </button>
+            </div>
+
+        </section>
+
+        <footer>
+            TypeMaster — Tingkatkan kemampuan mengetikmu setiap hari.<br>
+            Dibuat dengan HTML, CSS, dan Vanilla JavaScript.
+        </footer>
+
+    </main>
+
+    <script>
+        // Kumpulan teks untuk latihan mengetik
+        const sentences = [
+            "Belajar adalah perjalanan panjang untuk menemukan kemampuan terbaik dalam diri kita.",
+            "Teknologi membantu manusia menyelesaikan pekerjaan dengan lebih mudah dan efisien.",
+            "Jangan pernah berhenti mencoba karena setiap kesalahan adalah kesempatan untuk belajar.",
+            "Disiplin dan konsistensi merupakan kunci penting untuk mencapai tujuan masa depan.",
+            "Membaca buku dapat menambah pengetahuan serta membuka wawasan tentang dunia.",
+            "Keberhasilan tidak datang secara instan tetapi membutuhkan usaha dan kesabaran.",
+            "Pemrograman mengajarkan kita untuk berpikir logis dan memecahkan berbagai masalah.",
+            "Gunakan waktumu dengan baik karena waktu yang berlalu tidak dapat kembali lagi.",
+            "Kreativitas muncul ketika kita berani mencoba sesuatu yang baru dan berbeda.",
+            "Masa depan dibangun melalui keputusan kecil yang kita ambil setiap hari."
+        ];
+
+        // Mengambil elemen HTML
+        const textDisplay = document.getElementById("textDisplay");
+        const typingInput = document.getElementById("typingInput");
+        const timerDisplay = document.getElementById("timer");
+        const wpmDisplay = document.getElementById("wpm");
+        const accuracyDisplay = document.getElementById("accuracy");
+        const progressBar = document.getElementById("progressBar");
+        const statusDisplay = document.getElementById("status");
+        const startBtn = document.getElementById("startBtn");
+        const resetBtn = document.getElementById("resetBtn");
+        const newTextBtn = document.getElementById("newTextBtn");
+        const result = document.getElementById("result");
+        const bestScoreDisplay = document.getElementById("bestScore");
+
+        // Keadaan permainan
+        let selectedTime = 30;
+        let timeLeft = selectedTime;
+        let currentText = "";
+        let timerInterval = null;
+        let startTime = null;
+        let isRunning = false;
+        let hasStarted = false;
+
+        // Mengambil rekor dari localStorage
+        let bestScore = Number(localStorage.getItem("typemasterBest")) || 0;
+        bestScoreDisplay.textContent = bestScore + " WPM";
+
+        // Memilih kalimat secara acak
+        function getRandomText() {
+            const index = Math.floor(Math.random() * sentences.length);
+            return sentences[index];
+        }
+
+        // Menampilkan teks dengan warna per karakter
+        function renderText() {
+            const typed = typingInput.value;
+            textDisplay.innerHTML = "";
+
+            for (let i = 0; i < currentText.length; i++) {
+                const span = document.createElement("span");
+                span.textContent = currentText[i];
+
+                if (i < typed.length) {
+                    span.classList.add(
+                        typed[i] === currentText[i]
+                            ? "correct"
+                            : "incorrect"
+                    );
+                } else if (i === typed.length && isRunning) {
+                    span.classList.add("current");
+                }
+
+                textDisplay.appendChild(span);
+            }
+        }
+
+        // Menghitung statistik
+        function updateStats() {
+            const typed = typingInput.value;
+            let correctChars = 0;
+
+            for (let i = 0; i < typed.length; i++) {
+                if (typed[i] === currentText[i]) {
+                    correctChars++;
+                }
+            }
+
+            const elapsedSeconds = startTime
+                ? Math.max((Date.now() - startTime) / 1000, 0.1)
+                : 0;
+
+            const elapsedMinutes = elapsedSeconds / 60;
+
+            // WPM standar: karakter benar dibagi 5, per menit
+            const wpm = elapsedMinutes > 0
+                ? Math.round((correctChars / 5) / elapsedMinutes)
+                : 0;
+
+            const accuracy = typed.length > 0
+                ? Math.round((correctChars / typed.length) * 100)
+                : 100;
+
+            wpmDisplay.textContent = wpm;
+            accuracyDisplay.textContent = accuracy;
+
+            return { wpm, accuracy, correctChars };
+        }
+
+        // Memulai permainan
+        function startGame() {
+            if (isRunning) return;
+
+            if (timeLeft <= 0) {
+                resetGame();
+            }
+
+            isRunning = true;
+            hasStarted = true;
+            startTime = Date.now();
+
+            typingInput.disabled = false;
+            typingInput.focus();
+            typingInput.placeholder = "Mulai mengetik di sini...";
+            startBtn.disabled = true;
+
+            statusDisplay.textContent = "Sedang mengetik... semangat!";
+
+            renderText();
+
+            timerInterval = setInterval(() => {
+                const elapsed = (Date.now() - startTime) / 1000;
+                timeLeft = Math.max(0, selectedTime - elapsed);
+
+                timerDisplay.textContent = Math.ceil(timeLeft);
+                progressBar.style.width =
+                    (timeLeft / selectedTime * 100) + "%";
+
+                updateStats();
+
+                if (timeLeft <= 0) {
+                    finishGame();
+                }
+            }, 100);
+        }
+
+        // Menyelesaikan permainan
+        function finishGame() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+
+            isRunning = false;
+            timeLeft = 0;
+
+            timerDisplay.textContent = "0";
+            progressBar.style.width = "0%";
+
+            typingInput.disabled = true;
+            startBtn.disabled = false;
+            startBtn.textContent = "▶ Mulai lagi";
+
+            const stats = updateStats();
+            const isNewRecord = stats.wpm > bestScore;
+
+            if (isNewRecord) {
+                bestScore = stats.wpm;
+                localStorage.setItem("typemasterBest", bestScore);
+                bestScoreDisplay.textContent = bestScore + " WPM";
+            }
+
+            document.getElementById("finalWpm").textContent = stats.wpm;
+            document.getElementById("finalAccuracy").textContent =
+                stats.accuracy + "%";
+            document.getElementById("finalChars").textContent =
+                stats.correctChars;
+
+            document.getElementById("resultTitle").textContent =
+                stats.wpm >= 50 ? "Luar biasa! 🚀" : "Latihan selesai! 🎉";
+
+            document.getElementById("resultMessage").textContent =
+                "Kamu menyelesaikan latihan " + selectedTime +
+                " detik. Terus berlatih untuk meningkatkan kemampuanmu!";
+
+            document.getElementById("recordMessage").textContent =
+                isNewRecord
+                    ? "🏆 Rekor baru! Kamu berhasil mencapai " +
+                      stats.wpm + " WPM!"
+                    : "Rekor terbaikmu: " + bestScore + " WPM.";
+
+            result.classList.add("show");
+            statusDisplay.textContent = "Sesi selesai!";
+            renderText();
+        }
+
+        // Mereset permainan
+        function resetGame(newText = false) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+
+            isRunning = false;
+            hasStarted = false;
+            startTime = null;
+            timeLeft = selectedTime;
+
+            if (newText || !currentText) {
+                currentText = getRandomText();
+            }
+
+            typingInput.value = "";
+            typingInput.disabled = true;
+            typingInput.placeholder =
+                "Tekan Mulai, lalu ketik teks di atas...";
+
+            timerDisplay.textContent = selectedTime;
+            wpmDisplay.textContent = "0";
+            accuracyDisplay.textContent = "100";
+            progressBar.style.width = "100%";
+
+            startBtn.disabled = false;
+            startBtn.textContent = "▶ Mulai";
+
+            statusDisplay.textContent =
+                "Siap untuk menguji kemampuanmu?";
+
+            result.classList.remove("show");
+
+            renderText();
+        }
+
+        // Mengatur mode waktu
+        document.querySelectorAll(".mode-btn").forEach(button => {
+            button.addEventListener("click", () => {
+                if (isRunning) return;
+
+                document.querySelectorAll(".mode-btn").forEach(btn => {
+                    btn.classList.remove("active");
+                });
+
+                button.classList.add("active");
+                selectedTime = Number(button.dataset.time);
+
+                resetGame();
+            });
+        });
+
+        // Input ketikan
+        typingInput.addEventListener("input", () => {
+            if (!isRunning) return;
+
+            renderText();
+            updateStats();
+
+            // Selesaikan lebih awal jika seluruh teks telah diketik
+            if (typingInput.value.length >= currentText.length) {
+                finishGame();
+            }
+        });
+
+        // Tombol mulai
+        startBtn.addEventListener("click", () => {
+            if (hasStarted && !isRunning) {
+                resetGame(true);
+            }
+
+            startGame();
+        });
+
+        // Tombol ulangi
+        resetBtn.addEventListener("click", () => {
+            resetGame();
+        });
+
+        // Tombol teks baru
+        newTextBtn.addEventListener("click", () => {
+            resetGame(true);
+        });
+
+        // Tombol main lagi
+        document.getElementById("playAgainBtn").addEventListener(
+            "click",
+            () => {
+                resetGame(true);
+                startGame();
+            }
+        );
+
+        // Inisialisasi aplikasi
+        resetGame(true);
+    </script>
+</body>
+</html>
+```
