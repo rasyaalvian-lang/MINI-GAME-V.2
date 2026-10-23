@@ -1,0 +1,494 @@
+
+/* ===================================
+   1. PENGATURAN DASAR
+=================================== */
+
+:root {
+    --bg: #0b1120;
+    --card: #151e30;
+    --border: #28354b;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --primary: #818cf8;
+    --green: #4ade80;
+    --red: #fb7185;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    padding: 30px 16px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+}
+
+
+/* ===================================
+   2. CONTAINER DAN HEADER
+=================================== */
+
+.container {
+    max-width: 900px;
+    margin: auto;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 40px;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: var(--primary);
+}
+
+.tagline {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.best-score {
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--card);
+    font-size: 13px;
+}
+
+.best-score strong {
+    color: #fbbf24;
+}
+
+
+/* ===================================
+   3. JUDUL DAN DESKRIPSI
+=================================== */
+
+.intro {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.intro h1 {
+    font-size: clamp(28px, 5vw, 42px);
+    margin-bottom: 12px;
+    letter-spacing: -1.5px;
+}
+
+.intro h1 span {
+    color: var(--primary);
+}
+
+.intro p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* ===================================
+   4. KARTU UTAMA
+=================================== */
+
+.game-card {
+    padding: 26px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--card);
+    box-shadow: 0 20px 50px #00000025;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--border);
+}
+
+.section-label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+
+/* ===================================
+   5. TOMBOL PILIHAN WAKTU
+=================================== */
+
+.modes {
+    display: flex;
+    gap: 6px;
+}
+
+button {
+    cursor: pointer;
+    font-family: inherit;
+    transition: 0.2s;
+}
+
+.mode-btn {
+    padding: 9px 15px;
+    color: var(--muted);
+    background: #0b1120;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+}
+
+.mode-btn.active {
+    color: white;
+    background: #6366f1;
+    border-color: #818cf8;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+
+/* ===================================
+   6. STATISTIK WPM, AKURASI, TIMER
+=================================== */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 24px 0;
+}
+
+.stat {
+    padding: 17px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #0b1120;
+}
+
+.stat-label {
+    margin-bottom: 9px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.stat-value {
+    font-size: 27px;
+    font-weight: 800;
+}
+
+.stat-value small {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.timer-value {
+    color: #fbbf24;
+}
+
+
+/* ===================================
+   7. PROGRESS BAR
+=================================== */
+
+.progress-track {
+    height: 5px;
+    overflow: hidden;
+    background: #28354b;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 100%;
+    background: var(--primary);
+    transition: width 0.2s linear;
+}
+
+
+/* ===================================
+   8. TEKS LATIHAN MENGETIK
+=================================== */
+
+.text-box {
+    position: relative;
+    min-height: 180px;
+    padding: 22px;
+    background: #0b1120;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    line-height: 2;
+    font-size: 18px;
+    letter-spacing: 0.3px;
+}
+
+.text-box span.correct {
+    color: var(--green);
+}
+
+.text-box span.incorrect {
+    color: var(--red);
+    background: #fb71851c;
+    border-radius: 3px;
+    text-decoration: underline;
+}
+
+.text-box span.current {
+    border-left: 2px solid var(--primary);
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
+
+
+/* ===================================
+   9. KOLOM INPUT
+=================================== */
+
+.input-area {
+    margin-top: 18px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 16px;
+    color: var(--text);
+    background: #0b1120;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    outline: none;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+textarea:focus {
+    border-color: var(--primary);
+}
+
+textarea:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.hint {
+    margin-top: 9px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* ===================================
+   10. TOMBOL AKSI
+=================================== */
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    color: var(--text);
+    background: #202b40;
+    font-weight: 600;
+}
+
+.btn-primary {
+    color: white;
+    background: #6366f1;
+    border-color: #6366f1;
+}
+
+.btn:hover:not(:disabled) {
+    filter: brightness(1.12);
+    transform: translateY(-1px);
+}
+
+
+/* ===================================
+   11. HASIL PERMAINAN
+=================================== */
+
+.result {
+    display: none;
+    margin-top: 25px;
+    padding: 24px;
+    border: 1px solid #4ade8040;
+    border-radius: 14px;
+    background: #4ade800a;
+}
+
+.result.show {
+    display: block;
+}
+
+.result h2 {
+    margin-bottom: 8px;
+    font-size: 23px;
+}
+
+.result > p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.result-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.result-stat {
+    padding: 15px;
+    border-radius: 10px;
+    background: #151e30;
+}
+
+.result-stat strong {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 25px;
+}
+
+.result-stat span {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.new-record {
+    color: #fbbf24 !important;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+
+/* ===================================
+   12. FOOTER
+=================================== */
+
+footer {
+    margin-top: 28px;
+    text-align: center;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+
+/* ===================================
+   13. RESPONSIVE UNTUK HP
+=================================== */
+
+@media (max-width: 600px) {
+    body {
+        padding: 22px 12px;
+    }
+
+    header {
+        align-items: flex-start;
+        margin-bottom: 30px;
+    }
+
+    .logo {
+        font-size: 21px;
+    }
+
+    .best-score {
+        padding: 10px;
+        font-size: 11px;
+    }
+
+    .game-card {
+        padding: 17px;
+    }
+
+    .toolbar {
+        align-items: flex-start;
+    }
+
+    .stat {
+        padding: 12px;
+    }
+
+    .stat-value {
+        font-size: 23px;
+    }
+
+    .text-box {
+        padding: 15px;
+        font-size: 16px;
+    }
+
+    .result-stats {
+        gap: 7px;
+    }
+
+    .result-stat {
+        padding: 10px;
+    }
+
+    .result-stat strong {
+        font-size: 20px;
+    }
+
+    .actions {
+        align-items: flex-start;
+    }
+
+    .buttons {
+        width: 100%;
+    }
+
+    .buttons .btn {
+        flex: 1;
+    }
+}
